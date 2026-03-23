@@ -32,3 +32,15 @@ Este repositorio contiene un script en Python que recopila información detallad
 
    ```bash
    pip install dnspython requests nmap whois pyasn
+
+**uso
+
+git clone https://github.com/TROOG09/doxx-web.git
+
+cd doxx-web
+
+python script.py
+
+Introduce el dominio para obtener información: example.com
+ es para termux/kali
+THESIXCLOWN/LAPSUS GROUP, no se hace responsable del uso que le des (ADVERTENCIA)
