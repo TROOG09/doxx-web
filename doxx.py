@@ -1,18 +1,3 @@
-# Proyecto creado por THC
-# GitHub: https://github.com/tu-usuario
-# Licencia: MIT
-
-# ASCII Art - Thesixclown
-# Creado por: thesixclown team / lapsus group / creator : 333g
-
-"""
-▄▄▄▄▄▄▄▄▄ ▄▄                                ▄▄                     
-▀▀▀███▀▀▀ ██                ▀▀              ██                     
-   ███    ████▄ ▄█▀█▄ ▄█▀▀▀ ██  ██ ██ ▄████ ██ ▄███▄ ██   ██ ████▄ 
-   ███    ██ ██ ██▄█▀ ▀███▄ ██   ███  ██    ██ ██ ██ ██ █ ██ ██ ██ 
-   ███    ██ ██ ▀█▄▄▄ ▄▄▄█▀ ██▄ ██ ██ ▀████ ██ ▀███▀  ██▀██  ██ ██ 
-"""
-
 import socket
 import dns.resolver
 import whois
@@ -21,7 +6,30 @@ import nmap
 import json
 import pyasn
 import re
+import os
 
+# Información del Proyecto
+"""
+Proyecto creado por THC
+GitHub: https://github.com/TROOG09
+Licencia: MIT
+
+ASCII Art - Thesixclown
+Creado por: thesixclown team / lapsus group / creator : 333g
+"""
+
+# Decoración ASCII
+def mostrar_ascii():
+    print("""
+    ######################################
+    #        DOXX-WEB OSINT TOOL        #
+    ######################################
+    # 1. Ingresar dominio               #
+    # 0. Salir                          #
+    ######################################
+    """)
+
+# Función para obtener datos DNS
 def obtener_datos_dns(dominio):
     print(f"Consultando DNS para {dominio}...")
     try:
@@ -50,6 +58,7 @@ def obtener_datos_dns(dominio):
         print(f"Error al obtener datos DNS: {e}")
         return None
 
+# Función para obtener la geolocalización de la IP
 def obtener_geolocalizacion(ip):
     print(f"Obteniendo geolocalización para la IP {ip}...")
     url = f"http://ip-api.com/json/{ip}?fields=country,city,zip,region"
@@ -60,6 +69,7 @@ def obtener_geolocalizacion(ip):
         return None
     return data
 
+# Función para obtener información del ASN y Tracking Root
 def obtener_tracking_root(ip):
     print(f"Consultando ASN y tracking root para {ip}...")
     try:
@@ -71,6 +81,7 @@ def obtener_tracking_root(ip):
         print(f"Error al obtener ASN: {e}")
         return None, None, None
 
+# Función para escanear puertos
 def escanear_puertos(ip):
     print(f"Escaneando puertos en {ip}...")
     nm = nmap.PortScanner()
@@ -85,6 +96,7 @@ def escanear_puertos(ip):
 
     return puertos_abiertos
 
+# Función para obtener datos WHOIS
 def obtener_info_whois(dominio):
     print(f"Consultando WHOIS para {dominio}...")
     try:
@@ -94,6 +106,7 @@ def obtener_info_whois(dominio):
         print(f"Error al obtener datos WHOIS: {e}")
         return None
 
+# Función para obtener la IP de un dominio
 def obtener_ip(dominio):
     try:
         ip = socket.gethostbyname(dominio)
@@ -101,19 +114,30 @@ def obtener_ip(dominio):
     except socket.gaierror:
         return None
 
-def extraer_correos_whois(whois_data):
-    # Buscar correos en los datos WHOIS (sólo si están disponibles)
-    correos = []
+# Función para extraer correos y usuarios de los datos WHOIS
+def extraer_usuarios_y_correos_whois(whois_data):
+    usuarios_y_correos = []
     if whois_data:
-        for key, value in whois_data.items():
-            if isinstance(value, str) and re.match(r"[^@]+@[^@]+\.[^@]+", value):
-                correos.append(value)
-            elif isinstance(value, list):
-                for item in value:
-                    if isinstance(item, str) and re.match(r"[^@]+@[^@]+\.[^@]+", item):
-                        correos.append(item)
-    return correos
+        # Revisamos los campos comunes donde pueden aparecer los correos
+        campos = [
+            'Registrant Name', 'Admin Name', 'Tech Name', 'Registrant Email', 
+            'Admin Email', 'Tech Email', 'Registrant Organization', 
+            'Admin Organization', 'Tech Organization'
+        ]
+        
+        for campo in campos:
+            if campo in whois_data:
+                value = whois_data.get(campo)
+                if isinstance(value, str):
+                    if re.match(r"[^@]+@[^@]+\.[^@]+", value):
+                        usuarios_y_correos.append((campo, value))
+                elif isinstance(value, list):
+                    for item in value:
+                        if isinstance(item, str) and re.match(r"[^@]+@[^@]+\.[^@]+", item):
+                            usuarios_y_correos.append((campo, item))
+    return usuarios_y_correos
 
+# Función principal para obtener toda la información
 def obtener_info_completa(dominio):
     ip = obtener_ip(dominio)
     if ip:
@@ -131,9 +155,11 @@ def obtener_info_completa(dominio):
     info_whois = obtener_info_whois(dominio)
     if info_whois:
         print(f"Información WHOIS para {dominio}: {info_whois}")
-        correos = extraer_correos_whois(info_whois)
-        if correos:
-            print(f"Correos electrónicos encontrados en WHOIS: {correos}")
+        usuarios_y_correos = extraer_usuarios_y_correos_whois(info_whois)
+        if usuarios_y_correos:
+            print("Usuarios y correos electrónicos encontrados en WHOIS:")
+            for usuario, correo in usuarios_y_correos:
+                print(f"{usuario}: {correo}")
 
     # Geolocalización de la IP
     geolocalizacion = obtener_geolocalizacion(ip)
@@ -152,9 +178,19 @@ def obtener_info_completa(dominio):
     else:
         print(f"No se encontraron puertos abiertos en {ip}.")
 
-def main():
-    dominio = input("Introduce el dominio para obtener información: ")
-    obtener_info_completa(dominio)
+# Función para mostrar el menú de opciones
+def mostrar_menu():
+    mostrar_ascii()  # Mostrar el arte ASCII
+    while True:
+        opcion = input("Seleccione una opción (1 para ingresar dominio, 0 para salir): ")
+        if opcion == '1':
+            dominio = input("Introduce el dominio para obtener información: ")
+            obtener_info_completa(dominio)
+        elif opcion == '0':
+            print("Saliendo...")
+            break
+        else:
+            print("Opción no válida. Intente nuevamente.")
 
 if __name__ == "__main__":
-    main()
+    mostrar_menu()
