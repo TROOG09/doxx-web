@@ -26,23 +26,7 @@ Este repositorio contiene un script en Python que recopila información detallad
 2. **Librerías necesarias**: El script necesita algunas librerías de Python. Puedes instalarlas con `pip`:
 
    ```bash
-pkg install git git clone https://github.com/TROOG09/doxx-web.git cd doxx-web pkg update && pkg upgrade
-pkg install python
-pkg install python3-pip pip install dnspython requests nmap whois pyasn python script.py
-   termux : pkg update && pkg upgrade  pkg install python
-pkg install nmap
-pkg install python3-pip
-pip install dnspython requests nmap whois pyasn 
-git clone https://github.com/TROOG09/doxx-web.git 
-cd doxx-web
-python script.py
 
-kali: sudo apt update && sudo apt upgrade 
-sudo apt install python3 python3-pip nmap whois
-pip3 install dnspython requests pyasn 
-git clone https://github.com/TROOG09/doxx-web.git
-cd doxx-web
-python3 script.py
 
 ejemplo: Introduce el dominio para obtener información: example.com 
 
