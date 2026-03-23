@@ -6,28 +6,56 @@ import nmap
 import json
 import pyasn
 import re
-import os
 
 # Información del Proyecto
 """
-Proyecto creado por THC
-GitHub: https://github.com/TROOG09
-Licencia: MIT
+######################################
+#    OSINT Website THESIXCLOWN      #
+######################################
+#  Creado por: THESIXCLOWN          #
+#  Autor: lapsus group / 333g        #
+#  GitHub: https://github.com/tu-usuario  #
+#  Licencia: MIT                    #
+######################################
 
-ASCII Art - Thesixclown
-Creado por: thesixclown team / lapsus group / creator : 333g
+# ASCII Art - THESIXCLOWN
+# Creado por: THESIXCLOWN team / lapsus group / creator: 333g
 """
 
-# Decoración ASCII
+# Decoración ASCII - Sección de presentación
 def mostrar_ascii():
     print("""
     ######################################
-    #        DOXX-WEB OSINT TOOL        #
+    #   OSINT Website THESIXCLOWN      #
     ######################################
     # 1. Ingresar dominio               #
     # 0. Salir                          #
     ######################################
     """)
+
+# Función para obtener estadísticas de tráfico desde SimilarWeb
+def obtener_estadisticas_trafico(dominio, api_key):
+    url = f'https://api.similarweb.com/v1/website/{dominio}/total-traffic-and-engagement/visits'
+    headers = {
+        'Authorization': f'Bearer {api_key}'  # Tu clave API de SimilarWeb
+    }
+    try:
+        response = requests.get(url, headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            if 'visits' in data:
+                visitas_totales = data['visits']['total']
+                print(f"Visitas totales en {dominio}: {visitas_totales}")
+                return visitas_totales
+            else:
+                print(f"No se pudieron obtener datos de tráfico para {dominio}.")
+                return None
+        else:
+            print(f"Error al obtener datos de tráfico. Código de estado: {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"Error al consultar la API de SimilarWeb: {e}")
+        return None
 
 # Función para obtener datos DNS
 def obtener_datos_dns(dominio):
@@ -137,8 +165,14 @@ def extraer_usuarios_y_correos_whois(whois_data):
                             usuarios_y_correos.append((campo, item))
     return usuarios_y_correos
 
-# Función principal para obtener toda la información
-def obtener_info_completa(dominio):
+# Función principal que incluye la consulta de tráfico
+def obtener_info_completa(dominio, api_key):
+    print(f"Consultando estadísticas de tráfico para {dominio}...")
+    visitas_totales = obtener_estadisticas_trafico(dominio, api_key)
+    
+    if visitas_totales:
+        print(f"Visitas totales a {dominio}: {visitas_totales}")
+    
     ip = obtener_ip(dominio)
     if ip:
         print(f"La IP de {dominio} es {ip}")
@@ -185,12 +219,9 @@ def mostrar_menu():
         opcion = input("Seleccione una opción (1 para ingresar dominio, 0 para salir): ")
         if opcion == '1':
             dominio = input("Introduce el dominio para obtener información: ")
-            obtener_info_completa(dominio)
+            api_key = input("Introduce tu API Key de SimilarWeb: ")
+            obtener_info_completa(dominio, api_key)
         elif opcion == '0':
             print("Saliendo...")
             break
-        else:
-            print("Opción no válida. Intente nuevamente.")
-
-if __name__ == "__main__":
-    mostrar_menu()
+       
