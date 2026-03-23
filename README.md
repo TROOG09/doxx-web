@@ -26,8 +26,9 @@ Este repositorio contiene un script en Python que recopila información detallad
 2. **Librerías necesarias**: El script necesita algunas librerías de Python. Puedes instalarlas con `pip`:
 
    ```bash
-   pip install dnspython requests nmap whois pyasn
-
+pkg install git git clone https://github.com/TROOG09/doxx-web.git cd doxx-web pkg update && pkg upgrade
+pkg install python
+pkg install python3-pip pip install dnspython requests nmap whois pyasn python script.py
    termux : pkg update && pkg upgrade  pkg install python
 pkg install nmap
 pkg install python3-pip
