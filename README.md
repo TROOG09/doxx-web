@@ -10,7 +10,25 @@ Este repositorio contiene un script en Python que recopila información detallad
 
 ## Proyecto creado por THC
 
-- **GitHub**: [https://github.com/tu-usuario](https://github.com/tu-usuario)
+- **GitHub**: [https://github.com/tu-usuario](https://github.com/TROOG09)
 - **Licencia**: MIT
 
 ## ASCII Art - Thesixclown
+▄▄▄▄▄▄▄▄▄ ▄▄ ▄▄
+▀▀▀███▀▀▀ ██ ▀▀ ██
+███ ████▄ ▄█▀█▄ ▄█▀▀▀ ██ ██ ██ ▄████ ██ ▄███▄ ██ ██ ████▄
+███ ██ ██ ██▄█▀ ▀███▄ ██ ███ ██ ██ ██ ██ ██ █ ██ ██ ██
+███ ██ ██ ▀█▄▄▄ ▄▄▄█▀ ██▄ ██ ██ ▀████ ██ ▀███▀ ██▀██ ██ 
+
+
+- **thesixclown team**
+- **lapsus group**
+- **creator : 333g**
+
+## Requisitos
+
+1. Python 3.x
+2. Librerías necesarias:
+
+   ```bash
+   pip install dnspython requests nmap whois pyasn
