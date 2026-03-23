@@ -26,8 +26,34 @@ Este repositorio contiene un script en Python que recopila información detallad
 2. **Librerías necesarias**: El script necesita algunas librerías de Python. Puedes instalarlas con `pip`:
 
    ```bash
+pip install -r requirements.txt 
+   ```bash
+pkg update && pkg upgrade
+   ```bash
+pkg install git
+   ```bash
+git clone https://github.com/TROOG09/doxx-web.git
+   ```bash
+cd doxx-web
+   ```bash
+pip install -r requirements.txt
+   ```bash
+python script.py
+   ```bash
 
-
+en linux
+    ```bash
+sudo apt update && sudo apt upgrade
+    ```bash
+sudo apt install git
+    ```bash
+git clone https://github.com/TROOG09/doxx-web.git
+    ```bash
+cd doxx-web
+    ```bash
+pip3 install -r requirements.txt
+    ```bash
+python3 script.py
 ejemplo: Introduce el dominio para obtener información: example.com 
 
 ## Advertencia
